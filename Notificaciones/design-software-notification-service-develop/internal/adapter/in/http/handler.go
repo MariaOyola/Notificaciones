@@ -28,6 +28,8 @@ type Pinger interface {
 	Ping(ctx context.Context) error
 }
 
+// Handler conecta las solicitudes HTTP con los casos de uso de la aplicacion.
+// Tambien concentra las dependencias transversales: logs, metricas y trazas.
 type Handler struct {
 	uc             in.SendNotificationUseCase
 	getUC          in.GetNotificationUseCase
@@ -39,6 +41,7 @@ type Handler struct {
 
 type Option func(*Handler)
 
+// Las opciones permiten configurar el handler sin exponer sus campos internos.
 func WithMetrics(m *otelplatform.Metrics) Option { return func(h *Handler) { h.metrics = m } }
 
 func WithReadinessChecks(checks map[string]Pinger) Option {
@@ -66,6 +69,7 @@ func NewHandler(uc in.SendNotificationUseCase, opts ...Option) *Handler {
 			opt(h)
 		}
 	}
+		// Routes registra los endpoints y aplica la instrumentacion HTTP alrededor del mux.
 	return h
 }
 
@@ -106,6 +110,8 @@ func (h *Handler) ready(w http.ResponseWriter, r *http.Request) {
 	}
 	results := make([]checkResult, 0, len(h.checks))
 	allOK := true
+	// Se consulta cada dependencia y se ordenan los resultados para que la respuesta
+	// sea estable, incluso cuando el mapa se recorre en un orden diferente.
 	for name, pinger := range h.checks {
 		cr := checkResult{Name: name, OK: true}
 		if err := pinger.Ping(r.Context()); err != nil {
@@ -141,6 +147,8 @@ func writeError(w http.ResponseWriter, status int, code, msg string) {
 	_ = json.NewEncoder(w).Encode(errorEnvelope{ErrorCode: code, Message: msg})
 }
 
+// send traduce el JSON recibido al comando de aplicacion y convierte el resultado
+// del caso de uso al contrato HTTP generado.
 // send implementa POST /notifications (api.SendNotificationRequest, generado desde
 // shared-contracts/openapi/notification.yaml). Valida el contrato, delega en el use case
 // y responde 202 con el api.SentNotification generado.
@@ -191,6 +199,8 @@ func (h *Handler) send(w http.ResponseWriter, r *http.Request) {
 // E1: devuelve 200 + SentNotification cuando el id existe.
 // E2: devuelve 404 NOT_FOUND cuando no existe.
 func (h *Handler) get(w http.ResponseWriter, r *http.Request) {
+	// El router de la biblioteca estandar expone el parametro entre llaves mediante
+	// PathValue; se valida antes de consultar el caso de uso.
 	id := r.PathValue("id")
 	if _, err := uuid.Parse(id); err != nil {
 		writeError(w, http.StatusBadRequest, "VALIDATION_ERROR", "id must be a valid UUID")
@@ -228,6 +238,7 @@ func validateSendRequest(req api.SendNotificationRequest) error {
 	return nil
 }
 
+// toSentNotification adapta el modelo de dominio al tipo generado para la API.
 func toSentNotification(n *model.SentNotification) api.SentNotification {
 	id, _ := uuid.Parse(n.ID)
 	recipientID, _ := uuid.Parse(n.RecipientID)
@@ -249,6 +260,7 @@ func (h *Handler) withREDMetrics(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		sw := &statusWriter{ResponseWriter: w, status: http.StatusOK}
+		// statusWriter permite conocer el codigo final despues de ejecutar la ruta.
 		next.ServeHTTP(sw, r)
 		duration := time.Since(start).Seconds()
 

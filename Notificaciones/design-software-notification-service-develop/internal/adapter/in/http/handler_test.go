@@ -23,6 +23,8 @@ type fakeUseCase struct {
 	err    error
 }
 
+// Handle conserva la llamada recibida para verificar que el adaptador mapea
+// correctamente el request HTTP al comando de aplicacion.
 func (f *fakeUseCase) Handle(_ context.Context, cmd in.SendNotificationCommand) (*model.SentNotification, error) {
 	f.called = true
 	f.cmd = cmd
@@ -32,6 +34,7 @@ func (f *fakeUseCase) Handle(_ context.Context, cmd in.SendNotificationCommand) 
 	return f.result, nil
 }
 
+// fakeGetUseCase permite probar las respuestas del endpoint GET sin una base de datos.
 type fakeGetUseCase struct {
 	result *model.SentNotification
 	err    error
@@ -41,6 +44,8 @@ func (f *fakeGetUseCase) Handle(_ context.Context, _ in.GetNotificationQuery) (*
 	return f.result, f.err
 }
 
+// Los helpers construyen solicitudes reales contra el mux del handler y evitan
+// repetir el mismo codigo de preparacion en cada prueba.
 func doPost(h *Handler, body string) *httptest.ResponseRecorder {
 	req := httptest.NewRequest("POST", "/notifications", bytes.NewBufferString(body))
 	rec := httptest.NewRecorder()
@@ -55,6 +60,8 @@ func doGet(h *Handler, id string) *httptest.ResponseRecorder {
 	return rec
 }
 
+// El bloque principal comprueba el flujo exitoso y los errores de validacion,
+// persistencia, observabilidad y consulta por identificador.
 // E1: payload valido -> 202 + delega en el use case.
 func TestSend_Success_Returns202(t *testing.T) {
 	uc := &fakeUseCase{result: &model.SentNotification{

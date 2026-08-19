@@ -46,42 +46,30 @@ una parte sin romper las otras.
 ## 3. Evidencia — comando ejecutado
 
 ```powershell
-curl -X POST http://localhost:8080/notifications `
-  -H "Content-Type: application/json" `
-  -d '{
-    "recipientId": "22222222-2222-2222-2222-222222222222",
-    "recipientEmail": "prueba@sena.local",
-    "channel": "EMAIL",
-    "subject": "Mi primera prueba HU001",
-    "sourceService": "manual-test",
-    "sourceEventId": "11111111-1111-1111-1111-111111111111"
-  }'
+{
+  "recipient_id": "44444444-4444-4444-4444-444444444444",
+  "recipient_email": "usuario.prueba@sena.local",
+  "channel": "EMAIL",
+  "subject": "Notificación de prueba HU001",
+  "source_service": "notification-service-test",
+  "source_event_id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+}
 ```
 
 **Respuesta obtenida:**
-```
-_(pegar acá tu respuesta 202 Accepted real)_
-```
+![alt text](image-1.png)
 
 **Verificación en base de datos:**
 ```sql
 select * from notification.sent_notification order by created_at desc limit 1;
 ```
-```
-_(pegar acá tu captura del resultado del SELECT)_
-```
+![alt text](image-2.png)
 
 ## 4. Capturas / diagrama
 
-_(pegar acá tus capturas de: terminal corriendo `go run`, respuesta del curl, resultado del SELECT, y el diagrama de arquitectura hexagonal generado en la sesión de estudio)_
+![alt text](image-3.png)
 
-## 5. Video
-
-Link: _(pegar acá el link a tu video mostrando: `go run` arrancando →
-`curl` disparado → respuesta 202 → SELECT en la base confirmando el
-registro PENDING)_
-
-## 6. Mejora propuesta
+## 5. Mejora propuesta
 
 Ahora mismo, el archivo que recibe el pedido (`handler.go`) revisa a
 mano, campo por campo, que el pedido esté completo y correcto (por

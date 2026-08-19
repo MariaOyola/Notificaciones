@@ -1,14 +1,16 @@
-> cd docker-infra
+ cd docker-infra
 
-> docker compose --env-file .env.example down -v
+ docker compose --env-file .env.example down -v
 
-> $env:DB_REPOS_DIR=".."
+ echo $env:NOTIFICATION_DB_DSN
 
-> docker compose --env-file .env.example up postgres -d
+ $env:DB_REPOS_DIR=".."
 
-> docker compose --env-file .env.example ps
+ docker compose --env-file .env.example up postgres -d
 
-> docker compose --env-file .env.example --profile tooling run --rm liquibase-notification update
+ docker compose --env-file .env.example ps
+
+ docker compose --env-file .env.example --profile tooling run --rm liquibase-notification update
 
 
 
