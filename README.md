@@ -43,3 +43,10 @@ https://canva.link/kc76gi9ki2drb1y
 
 https://canva.link/y8fnwjv23hj381b
 
+----------------------------------------------
+
+# 3. Video
+
+https://youtu.be/YzLuJS6arOM?si=Ik34XAQNT1YAtRcc
+
+
