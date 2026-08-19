@@ -7,6 +7,27 @@ https://github.com/MariaOyola/Notificaciones/blob/main/Tareas%20-HU/HU002%20%E2%
 
 ## HU -03
 
+https://github.com/MariaOyola/Notificaciones/blob/main/Tareas%20-HU/HU003%20%E2%80%94%20Entrega%20por%20canal%20.md
+
+## HU -04
+
+https://github.com/MariaOyola/Notificaciones/blob/main/Tareas%20-HU/HU004%20%E2%80%94%20Resiliencia.md
+
+## HU -05
+
+https://github.com/MariaOyola/Notificaciones/blob/main/Tareas%20-HU/HU005%20%E2%80%94%20Consultar%20notificaci%C3%B3n%20enviada%20(GET).md
+
+## HU -06
+
+https://github.com/MariaOyola/Notificaciones/blob/main/Tareas%20-HU/HU006%20%E2%80%94%20Plantillas%20de%20notificaci%C3%B3n.md
+
+## HU -07
+
+https://github.com/MariaOyola/Notificaciones/blob/main/Tareas%20-HU/HU007%20%E2%80%94%20Observabilidad%20OpenTelemetry.md
+
+## HU -08
+
+https://github.com/MariaOyola/Notificaciones/blob/main/Tareas%20-HU/HU008%20%E2%80%94%20Levantado%20local%20end-to-end%20(docker-infra).md
 
 
 ## Notificaciones
