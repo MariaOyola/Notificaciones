@@ -3,6 +3,10 @@ https://github.com/MariaOyola/Notificaciones/blob/main/Tareas%20-HU/HU001%20%E2%
 
 ## HU -02
 
+https://github.com/MariaOyola/Notificaciones/blob/main/Tareas%20-HU/HU002%20%E2%80%94%20Consumir%20evento%20y%20entregar%20notificaci%C3%B3n.md
+
+## HU -03
+
 
 
 ## Notificaciones
